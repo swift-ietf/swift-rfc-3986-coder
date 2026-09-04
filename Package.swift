@@ -18,6 +18,17 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/swift-atoms/swift-ascii.git", branch: "main"),
+        .package(url: "https://github.com/swift-molecules/swift-ascii-parser.git", branch: "main"),
+        .package(
+            url: "https://github.com/swift-molecules/swift-ascii-serializer.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-molecules/swift-binary-serializer.git",
+            branch: "main"
+        ),
+        .package(url: "https://github.com/swift-standards/swift-ipv4-standard.git", branch: "main"),
+        .package(url: "https://github.com/swift-standards/swift-ipv6-standard.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-byte.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-coder.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-cursor.git", branch: "main"),
@@ -34,6 +45,11 @@ let package = Package(
             name: "RFC 3986 Coder",
             dependencies: [
                 .product(name: "ASCII", package: "swift-ascii"),
+                .product(name: "ASCII Serializer", package: "swift-ascii-serializer"),
+                .product(name: "Binary Serializable", package: "swift-binary-serializer"),
+                .product(name: "IPv4 Standard", package: "swift-ipv4-standard"),
+                .product(name: "IPv6 Standard", package: "swift-ipv6-standard"),
+                .product(name: "Parseable ASCII", package: "swift-ascii-parser"),
                 .product(name: "Byte", package: "swift-byte"),
                 .product(name: "Byte Standard Library Integration", package: "swift-byte"),
                 .product(name: "Coder", package: "swift-coder"),
@@ -53,6 +69,9 @@ let package = Package(
             name: "RFC 3986 Coder Tests",
             dependencies: [
                 "RFC 3986 Coder",
+                .product(name: "ASCII", package: "swift-ascii"),
+                .product(name: "ASCII Serializer", package: "swift-ascii-serializer"),
+                .product(name: "Binary Serializable", package: "swift-binary-serializer"),
                 .product(name: "Byte", package: "swift-byte"),
                 .product(name: "Byte Standard Library Integration", package: "swift-byte"),
                 .product(name: "Coder", package: "swift-coder"),
