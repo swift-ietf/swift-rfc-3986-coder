@@ -29,13 +29,13 @@ let package = Package(
         .package(url: "https://github.com/swift-atoms/swift-coder.git", branch: "main", traits: ["Checkpoint", "Map", "Pair", "Predicate", "Repetition", "Skip", "Choice", "Either", "IteratorLeaves"]),
         .package(url: "https://github.com/swift-atoms/swift-cursor.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-either.git", branch: "main"),
-        .package(url: "https://github.com/swift-atoms/swift-parser.git", branch: "main", traits: ["Always", "Choice", "Either", "FlatMap", "IteratorLeaves", "Map", "Repetition"]),
-        .package(url: "https://github.com/swift-atoms/swift-serializer.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-parser.git", branch: "main", traits: ["Always", "Choice", "Either", "FlatMap", "IteratorLeaves", "Map", "Repetition", "Append", "Pair", "Predicate", "Product", "Skip"]),
+        .package(url: "https://github.com/swift-atoms/swift-serializer.git", branch: "main", traits: ["Either", "Map", "Pair", "Repetition"]),
         .package(url: "https://github.com/swift-ietf/swift-rfc-3986.git", branch: "main"),
         .package(url: "https://github.com/swift-ietf/swift-rfc-791-coder.git", branch: "main"),
         .package(url: "https://github.com/swift-ietf/swift-rfc-4291-coder.git", branch: "main"),
         .package(url: "https://github.com/swift-ietf/swift-rfc-5952-coder.git", branch: "main"),
-        .package(url: "https://github.com/swift-atoms/swift-binary.git", branch: "main", traits: ["Serializer"]),
+        .package(url: "https://github.com/swift-atoms/swift-binary.git", branch: "main", traits: ["Serializer", "LEB128"]),
     ],
     targets: [
         .target(
