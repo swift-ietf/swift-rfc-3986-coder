@@ -1,8 +1,6 @@
 public import ASCII
-public import ASCII_Serializer
-public import Binary_Serializable
+public import Binary
 public import Byte
-public import Parseable_ASCII
 public import RFC_3986
 
 extension RFC_3986.URI.Path: @retroactive ASCII.Parseable {}
@@ -39,14 +37,5 @@ extension RFC_3986.URI.Path: @retroactive ASCII.Serializable, @retroactive Binar
             }
             buffer.append(contentsOf: segment.utf8.lazy.map(Byte.init(bitPattern:)))
         }
-    }
-}
-
-extension [Byte] {
-
-    public init(_ path: RFC_3986.URI.Path) {
-        var bytes: [Byte] = []
-        RFC_3986.URI.Path.serialize(path, into: &bytes)
-        self = bytes
     }
 }

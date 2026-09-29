@@ -1,7 +1,6 @@
 public import Byte
 public import Coder
 public import Cursor
-public import Cursor_Standard_Library_Integration
 public import RFC_3986
 import Parser
 import Serializer
@@ -33,8 +32,11 @@ extension RFC_3986.URI {
             text += ":"
 
             if Self.consume("//", &input) {
-                do throws(RFC_3986.URI.Host.Error) {
-                    text += "//" + (try RFC_3986.URI.Authority.Coder<Input, Buffer>().parse(&input)).description
+                do throws(RFC_3986.URI.Authority.Error) {
+                    let authority = try RFC_3986.URI.Authority.Coder<Input, Buffer>().parse(&input)
+                    var bytes: [Byte] = []
+                    RFC_3986.URI.Authority.serialize(authority, into: &bytes)
+                    text += "//" + String(decoding: bytes, as: UTF8.self)
                 } catch {
                     input.seek(to: start)
                     throw .invalidComponent("authority: \(error)")
@@ -92,5 +94,3 @@ extension RFC_3986.URI {
 
     public static var coder: Coder<ArraySlice<Byte>, [Byte]> { .init() }
 }
-
-extension RFC_3986.URI: Coder.Codable {}

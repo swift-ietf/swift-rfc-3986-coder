@@ -1,8 +1,7 @@
 import Byte
-import Byte_Standard_Library_Integration
 import Coder
-import Coder_Standard_Library_Integration
-import Cursor_Standard_Library_Integration
+import Cursor
+import IPv6_Standard
 import Parser
 import RFC_3986
 import RFC_3986_Coder
@@ -57,7 +56,7 @@ extension `RFC 3986 Coder Tests`.`Scheme Tests` {
 
     @Test
     func `round-trips`() throws {
-        #expect(try RFC_3986.URI.Scheme.https.encoded() == "https")
+        #expect(try type(of: RFC_3986.URI.Scheme.https).coder.serialize(RFC_3986.URI.Scheme.https) == [Byte](utf8: "https"))
     }
 }
 
@@ -84,7 +83,8 @@ extension `RFC 3986 Coder Tests`.`Host Tests` {
     func `reads a bracketed IP literal`() throws {
         var input: ArraySlice<Byte> = "[::1]/path"
         let host = try RFC_3986.URI.Host.coder.parse(&input)
-        #expect(host.rawValue == "[::1]")
+        #expect(host.ipv6Address == RFC_4291.IPv6.Address.loopback)
+        #expect(host.ipv6ScopedAddress?.zone == nil)
         #expect(input.first == Byte(bitPattern: 0x2F))
     }
 
@@ -186,7 +186,8 @@ extension `RFC 3986 Coder Tests`.`Authority Tests` {
     func `reads a bracketed IP literal host with a port`() throws {
         var input: ArraySlice<Byte> = "[::1]:443"
         let authority = try RFC_3986.URI.Authority.coder.parse(&input)
-        #expect(authority.host.rawValue == "[::1]")
+        #expect(authority.host.ipv6Address == RFC_4291.IPv6.Address.loopback)
+        #expect(authority.host.ipv6ScopedAddress?.zone == nil)
         #expect(authority.port?.value == 443)
     }
 
@@ -194,7 +195,7 @@ extension `RFC 3986 Coder Tests`.`Authority Tests` {
     func `round-trips`() throws {
         var input: ArraySlice<Byte> = "user@example.com:8080"
         let authority = try RFC_3986.URI.Authority.coder.parse(&input)
-        #expect(try authority.encoded() == "user@example.com:8080")
+        #expect(try type(of: authority).coder.serialize(authority) == [Byte](utf8: "user@example.com:8080"))
     }
 }
 
@@ -273,6 +274,24 @@ extension `RFC 3986 Coder Tests`.`URI Tests` {
     @Test
     func `round-trips`() throws {
         let uri = try RFC_3986.URI("https://example.com/path?q=1")
-        #expect(try uri.encoded() == "https://example.com/path?q=1")
+        #expect(try type(of: uri).coder.serialize(uri) == [Byte](utf8: "https://example.com/path?q=1"))
+    }
+}
+
+
+extension `RFC 3986 Coder Tests`.`Authority Tests` {
+    @Test func `a present malformed port is committed`() {
+        var input = [Byte](utf8: "example.com:invalid/path")[...]
+        #expect(throws: RFC_3986.URI.Authority.Error.self) {
+            try RFC_3986.URI.Authority.coder.parse(&input)
+        }
+        #expect(input.first == Byte(bitPattern: 0x2F))
+    }
+
+    @Test func `a missing port remains optional`() throws {
+        var input = [Byte](utf8: "example.com?query")[...]
+        let authority = try RFC_3986.URI.Authority.coder.parse(&input)
+        #expect(authority.port == nil)
+        #expect(input.first == Byte(bitPattern: 0x3F))
     }
 }

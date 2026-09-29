@@ -1,7 +1,6 @@
 public import Byte
 public import Coder
 public import Cursor
-public import Cursor_Standard_Library_Integration
 public import RFC_3986
 import Parser
 import Serializer
@@ -41,5 +40,3 @@ extension RFC_3986.URI.Scheme {
 
     public static var coder: Coder<ArraySlice<Byte>, [Byte]> { .init() }
 }
-
-extension RFC_3986.URI.Scheme: Coder.Codable {}

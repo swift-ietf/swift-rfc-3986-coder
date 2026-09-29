@@ -1,51 +1,38 @@
 public import Byte
 public import Coder
 public import Cursor
-public import Cursor_Standard_Library_Integration
 public import RFC_3986
-import Byte_Standard_Library_Integration
-import Cursor_Coder
-import Cursor_Parser_Optionally
-import Either
-import Iterator_Coder
 import Parser
-import Parser_Error
+import Either
 import Serializer
 
 extension RFC_3986.URI.Authority {
 
     public struct Coder<Input: Cursor.`Protocol`<Byte, Never>, Buffer: RangeReplaceableCollection<Byte>>: Coding {
 
-        public typealias Failure = RFC_3986.URI.Host.Error
+        public typealias Failure = RFC_3986.URI.Authority.Error
+        public typealias Output = RFC_3986.URI.Authority
 
         public init() {}
 
-        @Coder::Coder.Builder<Input, Buffer>
-        public var body: some Coding<Input, RFC_3986.URI.Authority, Buffer, Failure> {
-            Coder::Coder.Sequence(Input.self, Buffer.self) {
-                Parser.Optionally(
-                    Coder::Coder.Sequence(Input.self, Buffer.self) {
-                        RFC_3986.URI.Userinfo.Coder()
-                        "@"
-                    }
-                )
-                RFC_3986.URI.Host.Coder()
-                Parser.Optionally(
-                    Coder::Coder.Sequence(Input.self, Buffer.self) {
-                        ":"
-                        RFC_3986.URI.Port.Coder()
-                    }
-                )
+        public borrowing func parse(_ input: inout Input) throws(Failure) -> Output {
+            var bytes: [Byte] = []
+            while true {
+                let saved = input.checkpoint
+                guard let byte = input.next() else { break }
+                if byte.bitPattern == 0x2F || byte.bitPattern == 0x3F || byte.bitPattern == 0x23 {
+                    input.seek(to: saved)
+                    break
+                }
+                bytes.append(byte)
             }
-            .map(
-                to: { output in RFC_3986.URI.Authority(userinfo: output.0, host: output.1, port: output.2) },
-                from: { ($0.userinfo, $0.host, $0.port) }
-            )
-            .error.map { (failure) -> Failure in failure.value.value }
+            return try Output(ascii: bytes)
+        }
+
+        public borrowing func serialize(_ output: Output, into buffer: inout Buffer) {
+            RFC_3986.URI.Authority.serialize(output, into: &buffer)
         }
     }
 
     public static var coder: Coder<ArraySlice<Byte>, [Byte]> { .init() }
 }
-
-extension RFC_3986.URI.Authority: Coder.Codable {}

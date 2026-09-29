@@ -1,11 +1,12 @@
 public import ASCII
-public import ASCII_Serializer
-public import Binary_Serializable
+public import Binary
 public import Byte
-public import IPv4_Standard
-public import IPv6_Standard
-public import Parseable_ASCII
 public import RFC_3986
+import IPv4_Standard
+import IPv6_Standard
+import RFC_4291_Coder
+import RFC_5952_Coder
+import RFC_791_Coder
 
 extension RFC_3986.URI.Host: @retroactive ASCII.Parseable {}
 
@@ -21,7 +22,9 @@ extension RFC_3986.URI.Host: @retroactive ASCII.Serializable, @retroactive Binar
 
         case .ipv6(let scopedAddress):
             buffer.append(ASCII.Code.leftBracket)
-            RFC_4291.IPv6.Address.serialize(scopedAddress.address, into: &buffer)
+            var codes: [ASCII.Code] = []
+            RFC_4291.IPv6.Address.Text.Canonical().serialize(scopedAddress.address, into: &codes)
+            buffer.append(contentsOf: codes)
             if let zone = scopedAddress.zone {
                 buffer.append(ASCII.Code.percentSign)
                 buffer.append(ASCII.Code.`2`)

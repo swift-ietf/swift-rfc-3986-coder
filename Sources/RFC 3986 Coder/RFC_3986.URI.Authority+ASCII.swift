@@ -1,8 +1,6 @@
 public import ASCII
-public import ASCII_Serializer
-public import Binary_Serializable
+public import Binary
 public import Byte
-public import Parseable_ASCII
 public import RFC_3986
 
 extension RFC_3986.URI.Authority: @retroactive ASCII.Parseable {}
@@ -14,13 +12,25 @@ extension RFC_3986.URI.Authority: @retroactive ASCII.Serializable, @retroactive 
         _ authority: Self,
         into buffer: inout Buffer
     ) where Buffer.Element == ASCII.Code {
-        for byte in authority.rawValue.utf8 { buffer.append(ASCII.Code(byte)) }
+        if let userinfo = authority.userinfo {
+            RFC_3986.URI.Userinfo.serialize(userinfo, into: &buffer)
+            buffer.append(ASCII.Code.atSign)
+        }
+
+        RFC_3986.URI.Host.serialize(authority.host, into: &buffer)
+
+        if let port = authority.port {
+            buffer.append(ASCII.Code.colon)
+            for byte in String(port.value).utf8 { buffer.append(ASCII.Code(byte)) }
+        }
     }
 
     public static func serialize<Buffer: RangeReplaceableCollection>(
         _ authority: Self,
         into buffer: inout Buffer
     ) where Buffer.Element == Byte {
-        buffer.append(contentsOf: authority.rawValue.utf8.lazy.map(Byte.init(bitPattern:)))
+        var codes: [ASCII.Code] = []
+        Self.serialize(authority, into: &codes)
+        buffer.append(contentsOf: codes.map(\.byte))
     }
 }
