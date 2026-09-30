@@ -29,7 +29,7 @@ extension RFC_3986.URI.Authority {
             return try Output(ascii: bytes)
         }
 
-        public borrowing func serialize(_ output: Output, into buffer: inout Buffer) {
+        public borrowing func serialize(_ output: Output, into buffer: inout Buffer) throws(Failure) {
             RFC_3986.URI.Authority.serialize(output, into: &buffer)
         }
     }
