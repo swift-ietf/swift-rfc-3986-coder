@@ -3,7 +3,7 @@ public import RFC_3986
 import ASCII
 import RFC_3986_Coder
 
-extension RFC_3986.URI.Authority: Encodable, Decodable {
+extension RFC_3986.URI.Authority: Swift::Encodable, Swift::Decodable {
 
     public init(from decoder: any Decoder) throws {
         let container = try decoder.singleValueContainer()

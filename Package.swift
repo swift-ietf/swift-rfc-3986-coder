@@ -61,7 +61,7 @@ let package = Package(
         .testTarget(
             name: "RFC 3986 Coder Tests",
             dependencies: [
-                "RFC 3986 Coder",
+                .target(name: "RFC 3986 Coder"),
                 .product(name: "ASCII", package: "swift-ascii"),
                 .product(name: "Byte", package: "swift-byte"),
                 .product(name: "Coder", package: "swift-coder"),
@@ -77,7 +77,7 @@ let package = Package(
         .target(
             name: "RFC 3986 Coder Foundation Integration",
             dependencies: [
-                "RFC 3986 Coder",
+                .target(name: "RFC 3986 Coder"),
                 .product(name: "ASCII", package: "swift-ascii"),
                 .product(name: "RFC 3986", package: "swift-rfc-3986"),
             ]
@@ -85,7 +85,7 @@ let package = Package(
         .testTarget(
             name: "RFC 3986 Coder Foundation Integration Tests",
             dependencies: [
-                "RFC 3986 Coder Foundation Integration",
+                .target(name: "RFC 3986 Coder Foundation Integration"),
                 .product(name: "RFC 3986", package: "swift-rfc-3986"),
             ]
         ),
@@ -94,16 +94,14 @@ let package = Package(
 )
 
 for target in package.targets where ![.system, .binary, .plugin, .macro].contains(target.type) {
-    let ecosystem: [SwiftSetting] = [
+    target.swiftSettings = (target.swiftSettings ?? []) + [
         .strictMemorySafety(),
         .enableUpcomingFeature("ExistentialAny"),
         .enableUpcomingFeature("InternalImportsByDefault"),
         .enableUpcomingFeature("MemberImportVisibility"),
         .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+        .enableUpcomingFeature("InferIsolatedConformances"),
         .enableExperimentalFeature("Lifetimes"),
+        .treatAllWarnings(as: .error),
     ]
-
-    let package: [SwiftSetting] = []
-
-    target.swiftSettings = (target.swiftSettings ?? []) + ecosystem + package
 }

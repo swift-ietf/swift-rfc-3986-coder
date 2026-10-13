@@ -51,7 +51,7 @@ extension RFC_3986.PercentEncoded {
 
     public static var coder: Coder<ArraySlice<Byte>, [Byte]> { .init() }
 
-    public enum Error: Swift.Error, Equatable {
+    public enum Error: Swift::Error, Equatable {
         case expectedPercent
         case expectedHexDigit
     }
