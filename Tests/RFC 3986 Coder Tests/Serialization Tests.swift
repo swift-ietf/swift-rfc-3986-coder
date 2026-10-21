@@ -1,10 +1,10 @@
-import Serializer
 import ASCII
 import Binary
 import Byte
 import Coder
 import RFC_3986
 import RFC_3986_Coder
+import Serializer
 import Testing
 
 @Suite

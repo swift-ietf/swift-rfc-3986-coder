@@ -1,9 +1,9 @@
 public import ASCII
 public import Binary
 public import Byte
-public import RFC_3986
 import IPv4_Standard
 import IPv6_Standard
+public import RFC_3986
 import RFC_4291_Coder
 import RFC_5952_Coder
 import RFC_791_Coder

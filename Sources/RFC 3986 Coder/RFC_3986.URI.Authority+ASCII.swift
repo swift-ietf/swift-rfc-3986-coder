@@ -5,8 +5,7 @@ public import RFC_3986
 
 extension RFC_3986.URI.Authority: @retroactive ASCII.Parseable {}
 
-extension RFC_3986.URI.Authority: @retroactive ASCII.Serializable, @retroactive Binary.Serializable
-{
+extension RFC_3986.URI.Authority: @retroactive ASCII.Serializable, @retroactive Binary.Serializable {
 
     public static func serialize<Buffer: RangeReplaceableCollection>(
         _ authority: Self,

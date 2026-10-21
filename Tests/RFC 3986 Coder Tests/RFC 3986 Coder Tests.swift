@@ -278,7 +278,6 @@ extension `RFC 3986 Coder Tests`.`URI Tests` {
     }
 }
 
-
 extension `RFC 3986 Coder Tests`.`Authority Tests` {
     @Test func `a present malformed port is committed`() {
         var input = [Byte](utf8: "example.com:invalid/path")[...]

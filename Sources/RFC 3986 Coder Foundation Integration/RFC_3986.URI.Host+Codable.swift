@@ -1,6 +1,5 @@
-public import RFC_3986
-
 import ASCII
+public import RFC_3986
 import RFC_3986_Coder
 
 extension RFC_3986.URI.Host: @retroactive Encodable, @retroactive Decodable {

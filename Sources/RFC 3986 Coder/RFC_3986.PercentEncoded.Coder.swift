@@ -1,10 +1,9 @@
+import ASCII
 public import Byte
 public import Coder
 public import Cursor
-public import Cursor
-public import RFC_3986
-import ASCII
 import Parser
+public import RFC_3986
 import Serializer
 
 extension RFC_3986 {
@@ -15,7 +14,6 @@ extension RFC_3986 {
 extension RFC_3986.PercentEncoded {
 
     public struct Coder<Input: Cursor.`Protocol`<Byte, Never>, Buffer: RangeReplaceableCollection<Byte>>: Coding {
-
 
         public typealias Output = Byte
 

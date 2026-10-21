@@ -1,14 +1,13 @@
 public import Byte
 public import Coder
 public import Cursor
-public import RFC_3986
 import Parser
+public import RFC_3986
 import Serializer
 
 extension RFC_3986.URI.Query {
 
     public struct Coder<Input: Cursor.`Protocol`<Byte, Never>, Buffer: RangeReplaceableCollection<Byte>>: Coding {
-
 
         public typealias Output = RFC_3986.URI.Query
 

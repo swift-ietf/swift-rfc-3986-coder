@@ -1,6 +1,5 @@
+import Byte
 public import RFC_3986
-import Byte
-import Byte
 
 extension RFC_3986.URI {
 
